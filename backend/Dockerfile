@@ -11,14 +11,17 @@ COPY package*.json ./
 FROM base AS dev
 RUN npm install
 COPY . .
+EXPOSE 3400
 CMD ["npm", "run", "dev"]
 
 # ------------------------
 # Production image
 # ------------------------
 FROM base AS prod
-RUN npm ci --omit=dev   # ✅ omit devDependencies (no nodemon in prod)
+# Install only production dependencies
+RUN npm ci --omit=dev
+# RUN npm install --only=production
 COPY . .
 ENV NODE_ENV=production
-EXPOSE 5000
-CMD ["npm", "start"]    # ✅ run with node, not nodemon
+EXPOSE 3400
+CMD ["npm", "start"]

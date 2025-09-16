@@ -13,6 +13,7 @@ inside backend
 docker build -t backend .
 #docker image have error cache clear 
 docker compose build --no-cache backend
+docker compose up -d
 #docker have any error issue any one image/container to stop
 docker compose down -v
 #mongo db collection show in terminal
@@ -23,5 +24,10 @@ show dbs
 use lmsproject
 #list All collection
 show collection 
+#Run development with hot reload
+docker-compose up --build backend-dev
+#Run production optimized:
+docker-compose up --build -d backend-prod
+
 
 

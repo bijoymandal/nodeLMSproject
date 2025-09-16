@@ -13,22 +13,41 @@ services:
     volumes:
       - mongo-data:/data/db
 
-  backend:
+  # ---------- Development backend ----------
+  backend-dev:
     build:
       context: ./backend
-      target: prod
-    container_name: backend_container
+      target: dev
+    container_name: backend_dev_container
     restart: always
     env_file:
       - ./backend/.env
     ports:
-      - "3400:5000"
+      - "3400:3400"
     depends_on:
       - mongo
     volumes:
       - ./backend:/app
-      - /app/node_modules # prevents overwriting node_modules inside container
-    command: npm run dev # hot reload with nodemon (only in dev mode)
+      - /app/node_modules
+    command: npm run dev
 
+  # ---------- Production backend ----------
+  backend-prod:
+    build:
+      context: ./backend
+      target: prod
+    container_name: backend_prod_container
+    restart: always
+    env_file:
+      - ./backend/.env
+    ports:
+      - "3400:3400"
+    depends_on:
+      - mongo
+    command: npm start
+  # ---------- Alias backend (defaults to dev) ----------
+  backend:
+    extends:
+      service: backend-dev
 volumes:
   mongo-data:
