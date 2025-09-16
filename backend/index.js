@@ -1,22 +1,41 @@
+import fs from "fs";
 import express from 'express';
 import cors from "cors";
 import dotenv from "dotenv";
 import morgan from "morgan";
 dotenv.config();
 import connectionDB from './config/db.js';
-connectionDB();
-const server = express();
-server.use(cors());
+import Authrouter from './routes/auth.routes.js';
+import swagger from "swagger-ui-express";
 
-server.get('/', (req, res) => {
-  res.send('Hello World!');
-});
+const apiDocs = JSON.parse(
+  fs.readFileSync(new URL("./swagger.json", import.meta.url), "utf-8")
+);
+
+
+
+const server = express();
+server.use(express.json());
+// CROS Policy Configuration
+var corsOptions = {
+  origin: "*", // allow all origins, or specify ["http://localhost:3000"]
+  // methods: ["GET", "POST", "PUT", "DELETE"],
+  // allowedHeaders: ["Content-Type", "Authorization"],
+}
+server.use(cors(corsOptions));
+connectionDB();
+
 
 if(process.env.NODE_ENV === 'dev'){
   server.use(morgan('dev'));
 }
+server.use('/api-docs', swagger.serve, swagger.setup(apiDocs));
 
 
+server.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+server.use('/api/auth',Authrouter);
 const PORT = process.env.PORT || 3400;
 server.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
