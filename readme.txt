@@ -28,6 +28,9 @@ show collection
 docker-compose up --build backend-dev
 #Run production optimized:
 docker-compose up --build -d backend-prod
+#Run seeder file withdocker environment 
+docker compose run backend npm run seed
+
 
 
 
