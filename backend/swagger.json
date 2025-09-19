@@ -1,0 +1,119 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Smart LMS Node Js Project",
+        "version": "1.0.0",
+        "description": "API documentation for the Express + Mongoose backend"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3400",
+            "description": "Local Server"
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "JWT": {
+                "in": "header",
+                "type": "apiKey",
+                "name": "Authorization"
+            }
+        }
+    },
+    "paths": {
+        "/api/auth/register": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "User Signup",
+                "description": "Endpoint for user registration",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "enum": [
+                                            "student",
+                                            "instructor",
+                                            "admin"
+                                        ],
+                                        "default": "student"
+                                    }
+                                },
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "required": true,
+                "responses": {
+                    "201": {
+                        "description": "User Registration Successfully"
+                    },
+                    "500": {
+                        "description": "Something went wrong!"
+                    }
+                }
+            }
+        },
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "User SignIn",
+                "description": "Endpoint for user Login",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "email",
+                                    "password"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "required": true,
+                "responses": {
+                    "201": {
+                        "description": "User Login Successfully"
+                    },
+                    "401": {
+                        "description": "Invalid credentials"
+                    },
+                    "500": {
+                        "description": "Something went wrong!"
+                    }
+                }
+            }
+        }
+    }
+}
