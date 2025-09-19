@@ -43,10 +43,44 @@ services:
     depends_on:
       - mongo
     command: npm start
+
   # ---------- Alias backend (defaults to dev) ----------
   backend:
     extends:
       service: backend-dev
+
+  # ---------- Development frontend ----------
+  frontend-dev:
+    build:
+      context: ./frontend
+      target: dev
+    container_name: frontend_dev_container
+    restart: always
+    ports:
+      - "3001:5173" # Vite dev server
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: npm run dev
+
+  # ---------- Production frontend ----------
+  frontend-prod:
+    build:
+      context: ./frontend
+      target: prod
+    container_name: frontend_prod_container
+    restart: always
+    ports:
+      - "3000:80" # Nginx serving built React app
+    depends_on:
+      - backend
+
+  # ---------- Alias frontend (defaults to dev) ----------
+  frontend:
+    extends:
+      service: frontend-dev
 
 volumes:
   mongo-data:
