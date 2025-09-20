@@ -43,11 +43,7 @@ services:
     depends_on:
       - mongo
     command: npm start
-
-  # ---------- Alias backend (defaults to dev) ----------
-  backend:
-    extends:
-      service: backend-dev
+    extends: service:backend-dev
 
   # ---------- Development frontend ----------
   frontend-dev:
