@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 const {Schema} = mongoose;
-const courseSchema = new Schema({
+const courseSchema = new mongoose.Schema({
     title: {type:String,required:true},
     description: {type:String,required:true,unique:true},
     price: {type:String,required:true,default:0},
